@@ -1,0 +1,104 @@
+Relatório da Atividade Prática: Implantação em Contêineres com Heroku e Docker
+1. Descrição dos Passos Realizados e Observações
+Passo 1: Criação da Conta no GitHub e Repositório
+Ação: Criei um repositório chamado vcpf no GitHub e adicionei os arquivos package.json, server.js e Procfile.
+
+Observação: O GitHub facilitou o versionamento e a integração com o Heroku.
+
+Passo 2: Configuração no Heroku
+Ação:
+
+Criei uma aplicação chamada valcpf no Heroku.
+
+Conectei o repositório GitHub para deploy automático.
+
+Observação: O Heroku utiliza Dynos (contêineres leves) para executar a aplicação.
+
+Passo 3: Teste da Aplicação
+Ação:
+
+Acessei https://valcpf.herokuapp.com/ → Mensagem: "Hello world!".
+
+Testei a rota /validar/12345678900 → Resposta: false (CPF inválido).
+
+Observação: O deploy foi rápido, mas a primeira requisição teve um pequeno delay devido ao "cold start".
+
+Passo 4: Verificação de Imagens de Contêiner
+Ação:
+
+Utilizei o comando docker image ls para listar as imagens.
+
+Verifiquei o tamanho da imagem do Node.js usada pelo Heroku.
+
+Resultado:
+
+Copy
+REPOSITORY   TAG       SIZE  
+node         16-alpine ~110MB  
+Observação: O Heroku usa uma imagem base leve (Node.js em Alpine Linux) para otimizar o deploy.
+
+Passo 5: Uso de Imagem Adicional do DockerHub
+Ação:
+
+Adicionei a imagem validar-cpf (npm package) como dependência no package.json.
+
+O Heroku a baixou automaticamente durante o deploy.
+
+Observação: O Heroku gerencia dependências sem necessidade de intervenção manual.
+
+2. Dificuldades Encontradas
+Erro no Procfile:
+
+Inicialmente, nomeei o arquivo como Profile (erro de capitalização). Corrigi para Procfile.
+
+Cold Start no Heroku:
+
+A primeira requisição após o deploy foi lenta. Isso é comum em dynos gratuitos.
+
+Limitação de Recursos:
+
+O dyno gratuito entra em sono após 30 minutos de inatividade.
+
+3. Tamanho das Imagens de Contêiner
+Imagem Base (Node.js):
+
+node:16-alpine → ~110MB (versão otimizada).
+
+Imagem Adicional (validar-cpf):
+
+Baixada como dependência via npm (~2MB).
+
+4. Imagem Adicional do DockerHub Utilizada
+Imagem: validar-cpf (disponível como pacote npm).
+
+Como foi usada:
+
+Adicionada como dependência no package.json:
+
+json
+Copy
+"dependencies": {
+  "validar-cpf": "^2.0.4"
+}
+O Heroku baixou e instalou automaticamente durante o deploy.
+
+5. Comparação com Virtualização Tradicional
+Vantagens dos Contêineres (Heroku/Docker)
+✔ Leveza: Imagens pequenas (ex: Alpine Linux) vs. VMs completas.
+✔ Escalabilidade: Dynos podem ser ajustados sob demanda.
+✔ Isolamento: Aplicação roda em ambiente próprio sem conflitos.
+✔ Deploy Rápido: Heroku automatiza o processo com Git.
+
+Limitações
+❌ Recursos Limitados (em planos gratuitos).
+❌ Cold Start (em dynos ociosos).
+
+Conclusão
+A atividade permitiu entender na prática:
+✅ Implantação em PaaS (Heroku).
+✅ Uso de contêineres (Dynos).
+✅ Integração com GitHub e Docker.
+
+O Heroku mostrou-se eficiente para aplicações pequenas, enquanto o Docker confirmou suas vantagens em leveza e portabilidade. A experiência reforçou os conceitos de virtualização baseada em contêineres.
+
+
